@@ -1,22 +1,27 @@
-import React,{useState} from "react";
+import React,{useReducer} from "react";
 
 const BlogContext = React.createContext()//created wrapper for the app component
 
-export const BlogProvider = ({children}) =>{//?children is the element which was wrapped. In this example, it's <App/> from App.js
-   //?We passed in value to be used for all components
-//    const blogPosts = [
-//        {title:'Blog Post #1'},
-//        {title:'Blog Post #2'}
-//     ]
-    const [blogPost,setBlogPost] = useState([])
+const blogReducer = (state,action)=>{
+    switch(action.type){
+        case 'add_blogPost':
+            return [...state, {title:`Blog Post #${state.length+1}`}]
+        default:
+            return state
+    }
+}
 
-    const addBlogPost = ()=>{ //?added this function to be used in other component to trigger adding new post to array
-        setBlogPost([...blogPost,{title:`Blog Post #${blogPost.length+1}`}])
+export const BlogProvider = ({children}) =>{
+
+    const [state,dispatch] = useReducer(blogReducer,[])
+
+    const addBlogPost = ()=>{//for adding functionality, we have to duplicate most of the code here. Like editing, adding image etc.
+        dispatch({type: 'add_blogPost'})
     }
 
-    //?Now, every component can use this information directly passing from this component
+
     return( 
-        <BlogContext.Provider value={{data:blogPost,addBlogPost}}>
+        <BlogContext.Provider value={{data:state,addBlogPost}}>
             {children}
         </BlogContext.Provider> 
     )
