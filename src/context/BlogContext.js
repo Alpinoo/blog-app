@@ -1,6 +1,5 @@
-import React,{useReducer} from "react";
+import createDataContext from "./createDataContext"
 
-const BlogContext = React.createContext()//created wrapper for the app component
 
 const blogReducer = (state,action)=>{
     switch(action.type){
@@ -11,19 +10,12 @@ const blogReducer = (state,action)=>{
     }
 }
 
-export const BlogProvider = ({children}) =>{
-
-    const [state,dispatch] = useReducer(blogReducer,[])
-
-    const addBlogPost = ()=>{//for adding functionality, we have to duplicate most of the code here. Like editing, adding image etc.
+const addBlogPost = (dispatch)=>{// we have to pass dispatch to this function because we'll use dispatch to change state
+    return ()=>{
         dispatch({type: 'add_blogPost'})
     }
-
-
-    return( 
-        <BlogContext.Provider value={{data:state,addBlogPost}}>
-            {children}
-        </BlogContext.Provider> 
-    )
 }
-export default BlogContext
+
+//?We export what createDataContext returns. On right part, we added necessary input that createDataContext expects
+//?It'll return Context and Provider. 
+export const {Context, Provider} = createDataContext(blogReducer,{addBlogPost},[])

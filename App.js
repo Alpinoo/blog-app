@@ -2,7 +2,7 @@ import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import IndexScreen from "./src/screens/IndexScreen";
 import React from "react";
-import { BlogProvider } from "./src/context/BlogContext";
+import { Provider } from "./src/context/BlogContext";
 
 
 
@@ -23,8 +23,8 @@ const App = createAppContainer(navigator)
 
 export default ()=>{
   return (//Wrapped App component with blogProvider to pass data between components directly
-    <BlogProvider>
+    <Provider>
       <App/>
-    </BlogProvider>
+    </Provider>
   )
 }
